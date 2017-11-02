@@ -1,0 +1,18 @@
+{% extends 'abids/base.html' %}
+
+{% block content %}
+
+<ul>
+{% for auction in auctions %}
+
+<li><a href="{% url 'abids:auction' auction.id %}">{{ auction }}</li>
+
+{% empty %}
+<li>На сегодня нет аукуционов</li>
+
+{% endfor%}
+</ul>
+
+<a href="{% url 'abids:new_auction' %}">Добавить новый аукион:</a>
+
+{% endblock content %}

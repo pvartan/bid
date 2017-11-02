@@ -1,0 +1,14 @@
+{% extends 'abids/base.html'%}
+
+{% block content %}
+
+<p>Add new auction:</p>
+
+<form action="{% url 'abids:new_auction' %}" method="post">
+    {% csrf_token %}
+    {{form.as_p}}
+    <button name="submit">Добавить новый аукцион</button>
+    </form>
+
+
+{% endblock content %}

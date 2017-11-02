@@ -1,0 +1,40 @@
+
+{% extends 'abids/base.html' %}
+
+
+{% block content %}
+
+
+<p>{{ auction.title }}</p>
+<p>{{ auction.desc }} </p>
+<p>{{ auction.price }}</p>
+
+<p>Bids:</p>
+
+<ul>
+    {% for bid in bids %}
+    <li>{{bid}} {{bid.pub_date|date:'d M, Y H:i'}}</li>
+
+    {% empty %}
+    <li>Пока не было ставок</li>
+
+    {% endfor %}
+</ul>
+
+
+
+
+
+<p>Добавить новую ставку</p>
+
+<form action="{% url 'abids:auction' auction.id %}" method="post">
+    {%csrf_token%}
+    {{form.as_p}}
+
+    <button name="submit">Сделать ставку</button>
+    </form>
+
+
+
+
+{% endblock content %}
