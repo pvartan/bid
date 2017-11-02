@@ -23,10 +23,9 @@
 
 
 
-
+{% if user.is_authenticated %}
 
 <p>Добавить новую ставку</p>
-
 <form action="{% url 'abids:auction' auction.id %}" method="post">
     {%csrf_token%}
     {{form.as_p}}
@@ -34,7 +33,9 @@
     <button name="submit">Сделать ставку</button>
     </form>
 
-
+{% else %}
+<a href="{% url 'users:login' %}">log in</a>
+{% endif %}
 
 
 {% endblock content %}

@@ -3,6 +3,7 @@ from django.http import HttpResponseRedirect
 from django.core.urlresolvers import reverse
 from django.contrib.auth import login, logout, authenticate
 from django.contrib.auth.forms import UserCreationForm
+from django.contrib.auth.decorators import login_required
 
 
 from abids.models import Auction, Competitor
@@ -21,6 +22,7 @@ def auctions(request):
     return render(request, 'abids/auctions.html', context)
 
 
+@login_required
 def new_auction(request):
     """создание нового объявления"""
     if request.method != 'POST':
@@ -31,7 +33,9 @@ def new_auction(request):
         #отправленные данные POST; обработать данные
         form = AuctionForm(request.POST)
         if form.is_valid():
-            form.save()
+            new_auction = form.save(commit=False)
+            new_auction.owner = request.user
+            new_auction.save()
             return HttpResponseRedirect(reverse('abids:auctions'))
 
     context = {'form': form}
