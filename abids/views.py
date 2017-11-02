@@ -1,6 +1,9 @@
 from django.shortcuts import render
 from django.http import HttpResponseRedirect
 from django.core.urlresolvers import reverse
+from django.contrib.auth import login, logout, authenticate
+from django.contrib.auth.forms import UserCreationForm
+
 
 from abids.models import Auction, Competitor
 from abids.forms import AuctionForm, CompetitorForm
@@ -54,3 +57,6 @@ def auction(request, auction_id):
 
     context = {'auction': auction, 'bids': bids, 'form': form}
     return render(request, 'abids/auction.html', context)
+
+
+

@@ -1,0 +1,18 @@
+{% extends 'abids/base.html' %}
+
+
+{% block content %}
+
+{% if form.errors %}
+<p>Неправильный логин и (или) пароль. Попробуйте заного.</p>
+{% endif %}
+
+<form method="post" action="{%url 'users:login'%}">
+    {% csrf_token %}
+    {{form.as_p}}
+
+    <button name="submit">log in</button>
+    <input name="next" type="hidden" value="{% url 'abids:auctions'%}">
+    </form> 
+
+{% endblock content %}
