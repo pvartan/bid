@@ -7,6 +7,7 @@ urlpatterns = [
         url(r'^auction/(?P<auction_id>\d+)/$', views.auction, name='auction'),
         
         url(r'^new_auction$', views.new_auction, name='new_auction'),
+        url(r'^edit_auction(?P<auction_id>\d+)/$', views.edit_auction, name='edit_auction'),
 
         
         ]

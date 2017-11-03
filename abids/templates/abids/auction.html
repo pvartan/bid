@@ -6,6 +6,11 @@
 
 
 <p>{{ auction.title }}</p>
+
+{% if user.is_authenticated %}
+<p><a href="{% url 'abids:edit_auction' auction.id%}">редактировать</a></p>
+{% endif %}
+
 <p>{{ auction.desc }} </p>
 <p>{{ auction.price }}</p>
 
@@ -13,7 +18,7 @@
 
 <ul>
     {% for bid in bids %}
-    <li>{{bid}} {{bid.pub_date|date:'d M, Y H:i'}}</li>
+    <li>{{bid}} {{bid.bid_owner}} {{bid.pub_date|date:'d M, Y H:i'}}</li>
 
     {% empty %}
     <li>Пока не было ставок</li>
@@ -24,8 +29,10 @@
 
 
 {% if user.is_authenticated %}
+<p>Добавить новую ставку ({{bid_step}}):</p>
 
-<p>Добавить новую ставку</p>
+{% if is_success %}{{is_success}}{% endif %}
+
 <form action="{% url 'abids:auction' auction.id %}" method="post">
     {%csrf_token%}
     {{form.as_p}}

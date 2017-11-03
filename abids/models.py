@@ -17,6 +17,7 @@ class Competitor(models.Model):
 
     auction = models.ForeignKey(Auction)
     bid = models.PositiveIntegerField()
+    bid_owner = models.ForeignKey(User)
     pub_date = models.DateTimeField(auto_now_add=True)
 
     def __str__(self):
