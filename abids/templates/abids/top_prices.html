@@ -1,0 +1,17 @@
+{% extends 'abids/base.html' %}
+
+{% block content %}
+
+<ul>
+{% for top_price in top_prices %}
+<li><a href="{% url 'abids:auction' top_price.id %}"> {{top_price}} </a></li>
+
+{% empty %}
+<li>по данным запросам нет аукционов</li>
+
+{% endfor %}
+</ul>
+
+
+
+{% endblock content %}

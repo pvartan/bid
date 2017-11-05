@@ -1,5 +1,5 @@
 from django.shortcuts import render
-from django.http import HttpResponseRedirect, Http404
+from django.http import HttpResponseRedirect, HttpResponse, Http404
 from django.core.urlresolvers import reverse
 from django.contrib.auth import login, logout, authenticate
 from django.contrib.auth.forms import UserCreationForm
@@ -21,22 +21,49 @@ def auctions(request):
     context = {'auctions': auctions}
     return render(request, 'abids/auctions.html', context)
 
+def top_prices(request):
+    top_prices = Auction.objects.order_by('-price')
+    return render(request, 'abids/top_prices.html', {'top_prices': top_prices})
+
+def top_bids(request):
+    """выводит список самых популярных аукционов"""
+    #создает словарь для id : len(bid)
+    hardcore = {}
+    # словарь для id : title
+    hall_of_fame = {}
+    auctions = Auction.objects.all()
+
+    for auction in auctions:
+        bids = auction.competitor_set.all()
+        hardcore[auction.id] = len(bids)
+    
+    for k_auction_id, bids in sorted(hardcore.items(), key=lambda x: x[1], reverse=True):
+        auction = Auction.objects.get(id=k_auction_id)
+        hall_of_fame[k_auction_id] = auction.title
+
+    #return HttpResponse(hall_of_fame)
+
+    return render(request, 'abids/top_bids.html', {'hall_of_fame': hall_of_fame})
 
 @login_required
 def new_auction(request):
     """создание нового объявления"""
-    if request.method != 'POST':
-        #данные не отправлялись, создается пустая форма
-        form = AuctionForm()
-
-    else:
-        #отправленные данные POST; обработать данные
+    #получаем id последней темы
+    last_auction = Auction.objects.latest('id')
+    last_auction.id += 1
+    #отправленные данные POST; обработать данные
+    if request.method == 'POST':
         form = AuctionForm(request.POST)
+
         if form.is_valid():
             new_auction = form.save(commit=False)
+            # присваеваем запись пользователю
             new_auction.owner = request.user
             new_auction.save()
-            return HttpResponseRedirect(reverse('abids:auctions'))
+            return HttpResponseRedirect(reverse('abids:auction', args=[last_auction.id]))
+    else:
+        #данные не отправлялись, создается пустая форма
+        form = AuctionForm()
 
     context = {'form': form}
     return render(request, 'abids/new_auction.html', context)
@@ -51,7 +78,7 @@ def edit_auction(request, auction_id):
     if auction.owner != request.user:
         raise Http404
 
-    # отправка данных POST; лбработать данные
+    # отправка данных POST; обработать данные
     if request.method == 'POST':
         form = AuctionForm(instance=auction, data=request.POST)
 

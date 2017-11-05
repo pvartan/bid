@@ -1,0 +1,16 @@
+{% extends 'abids/base.html'%}
+
+{% block content %}
+
+<ul>
+{% for id, title in hall_of_fame.items %}
+<li><a href="{% url 'abids:auction' id  %}">{{title}}</a></li>
+
+    {% empty %}
+    <li>Нету горячих аукционов</li>
+
+    {% endfor %}
+    </ul>
+
+
+{% endblock content %}

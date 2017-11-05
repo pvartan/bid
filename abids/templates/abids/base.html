@@ -1,5 +1,7 @@
 <p><a href="{% url 'abids:index' %}">Index</a>-
 <a href="{% url 'abids:auctions' %}">Auctions</a>-
+<a href="{% url 'abids:top_prices' %}">Top Prices</a>-
+<a href="{% url 'abids:top_bids' %}">Top Bids</a>-
 
 {% if user.is_authenticated %}
 Hello, {{user.username}}.
